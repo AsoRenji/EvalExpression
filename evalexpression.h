@@ -30,19 +30,24 @@ inline double evalPrefixAndBracket(const char*&expression)
 
 inline double evalMulDiv(const char *&expression)
 {
-    const double res=evalPrefixAndBracket(expression);
-    while(isspace(*expression))
-        ++expression;
-    switch(*expression)
+    double res=evalPrefixAndBracket(expression);
+    while(true)
     {
-    case 0:
-        return res;
-    case'*':
-        return res*evalMulDiv(++expression);
-    case'/':
-        return res/evalMulDiv(++expression);
-    default:
-        return res;
+        while(isspace(*expression))
+            ++expression;
+        switch(*expression)
+        {
+        case 0:
+            return res;
+        case'*':
+            res*=evalPrefixAndBracket(++expression);
+            break;
+        case'/':
+            res/=evalPrefixAndBracket(++expression);
+            break;
+        default:
+            return res;
+        }
     }
 }
 
