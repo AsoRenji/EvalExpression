@@ -41,10 +41,8 @@ inline double evalMulDiv(const char *&expression)
         return res*evalMulDiv(++expression);
     case'/':
         return res/evalMulDiv(++expression);
-    case'+':case'-':
-        return res;
     default:
-        throw std::runtime_error("Bad expression");
+        return res;
     }
 }
 
@@ -62,9 +60,17 @@ inline double evalPlusMinus(const char *&expression)
     case'-':
         return res-evalPlusMinus(++expression);
     default:
-        throw std::runtime_error("Bad expression");
+        return res;
     }
 }
 
-inline double evalExpression(const char *expression){return evalPlusMinus(expression);}
+inline double evalExpression(const char *expression)
+{
+    const double res=evalPlusMinus(expression);
+    while(isspace(*expression))
+        ++expression;
+    if(*expression)
+        throw std::runtime_error("Bad expression");
+    return res;
+}
 #endif // EVALEXPRESSION_H
