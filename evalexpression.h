@@ -53,19 +53,24 @@ inline double evalMulDiv(const char *&expression)
 
 inline double evalPlusMinus(const char *&expression)
 {
-    const double res=evalMulDiv(expression);
-    while(isspace(*expression))
-        ++expression;
-    switch(*expression)
+    double res=evalMulDiv(expression);
+    while(true)
     {
-    case 0:
-        return res;
-    case'+':
-        return res+evalPlusMinus(++expression);
-    case'-':
-        return res-evalPlusMinus(++expression);
-    default:
-        return res;
+        while(isspace(*expression))
+            ++expression;
+        switch(*expression)
+        {
+        case 0:
+            return res;
+        case'+':
+            res+=evalMulDiv(++expression);
+            break;
+        case'-':
+            res-=evalMulDiv(++expression);
+            break;
+        default:
+            return res;
+        }
     }
 }
 
